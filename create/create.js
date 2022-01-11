@@ -5,20 +5,20 @@ import {
     logout 
 } from '../fetch-utils.js';
 
-const form = document.querySelectorAll('.bunny-form');
+const form = document.querySelector('.bunny-form');
 const logoutButton = document.getElementById('logout');
 
-form.addEventListener(e => {
+form.addEventListener('submit', async e => {
     e.preventDefault();
 
     const formData = new FormData(form);
 
-    const familyId = formData.get('family-id');
+    const family_Id = formData.get('family-id');
     const name = formData.get('bunny-name');
 
     await createBunny({
         name: name,
-        family_id: familyId
+        family_id: family_Id
     });
 
     form.reset();
@@ -26,9 +26,10 @@ form.addEventListener(e => {
 
 window.addEventListener('load', async() => {
     const select = document.querySelector('select');
-    const families = getFamilies();
+    const families = await getFamilies();
 
     for (let family of families) {
+        const option = document.createElement('option');
         option.value = family.id;
         option.textContent = family.name;
         
@@ -39,6 +40,6 @@ window.addEventListener('load', async() => {
 
 checkAuth();
 
-logoutButton.addEventListener('click', () => {
-    logout();
+logoutButton.addEventListener('click', async() => {
+    await logout();
 });
